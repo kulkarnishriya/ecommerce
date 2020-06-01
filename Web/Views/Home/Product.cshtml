@@ -1,0 +1,142 @@
+@model ProductModel
+@{
+    Layout = "_CommonLayout";
+}
+@{
+    ViewData["Title"] = @Model.Name;
+    var description = false;
+    var imgIndex = 0;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <center>
+                @{ 
+                    var mainImageSrc = "/images/system/no-image.png";
+                    if (Model.ProductImage != null)
+                    {
+                        mainImageSrc = Model.ProductImage;
+                    }
+                }
+                <img src="@mainImageSrc"
+                     class="product-main-image img-fluid"
+                     alt="@Model.Name"
+                     data-toggle="modal"
+                     data-target="#lightbox-modal"
+                     data-img-index="0" />
+            </center>
+        </div>
+        <div class="col-md-8">
+            <h4>@Model.Name</h4>
+            @if (Model.Rating > 0)
+            {
+                <span title="rating">
+                    @{
+                        int activeStar = 0;
+                        int roundedRating = Convert.ToInt32(Math.Round(Model.Rating, 0, MidpointRounding.AwayFromZero));
+                    }
+                    @for (int i = 0; i < roundedRating; i++)
+                    {
+                        <i class="fa fa-star star-active"></i>
+                        activeStar++;
+                    }
+                    @for (int i = 0; i < 5 - activeStar; i++)
+                    {
+                        <i class="fa fa-star star-inactive"></i>
+                    }
+                </span>
+                <h6 class="text-muted" style="display: inline-block;">
+                    @Model.Rating.ToString("N2")
+                </h6>
+            }            
+           <h6>@Model.Description</h6>
+            @if (Model.OldPrice > 0)
+            {
+                <h6>
+                    <strike class="text-muted">@Model.OldPrice.ToString("C2")</strike> @Html.Raw(Model.Price.ToString("C2"))
+                </h6>
+            }
+            else
+            {
+                <h6>@Model.Price.ToString("C2")</h6>
+            }
+            <form asp-area="" asp-controller="Cart" asp-action="Add" method="post">
+                <input type="hidden" value="@Model.Id" name="id" />
+                <button type="submit" id="addToCart" class="btn btn-primary btn-sm">Add to cart</button>
+            </form>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Back</a>
+        </div>
+    </div> <!-- row end -->
+    <br />
+</div> <!-- container end -->
+
+<script>
+    // lightbox
+    $(function () {
+        var currentSlide = 0;
+        var imgSlides = document.getElementsByClassName('lightbox-slide');
+
+        $('#lightbox-modal').on('show.bs.modal', function (event) {
+            let imgIndex = $(event.relatedTarget).data('img-index');
+
+            imgSlides[imgIndex].style.display = 'block';
+            currentSlide = imgIndex;
+            updateText(currentSlide);
+        });
+
+        $('#lightbox-modal').on('hide.bs.modal', function (event) {
+            imgSlides[currentSlide].style.display = 'none'; // hide the current image
+        });
+
+        $('.next').on('click', function () {
+            imgSlides[currentSlide].style.display = 'none';
+
+            if (currentSlide == imgSlides.length - 1) {
+                currentSlide = 0; // set the currentSlide to the start of slides
+            } else {
+                currentSlide++;
+            }
+
+            imgSlides[currentSlide].style.display = 'block';
+            updateText(currentSlide);
+        });
+
+        $('.prev').on('click', function () {
+            imgSlides[currentSlide].style.display = 'none';
+
+            if (currentSlide == 0) {
+                currentSlide = imgSlides.length - 1; // set the currentSlide to the end of slides
+            } else {
+                currentSlide--;
+            }
+
+            imgSlides[currentSlide].style.display = 'block';
+            updateText(currentSlide);
+        });
+
+        function updateText(n) {
+            $('#lightbox-modal').find('.modal-title').text(n + 1 + ' / ' + imgSlides.length)
+        }
+    });
+
+    $(function () {
+        $('#product-info-tabs li a').on('click', function (e) {
+            window.location.hash = '#!#' + e.target.id.toLowerCase();
+        });
+
+        $(function () {
+            if(window.location.hash.length > 0){
+                let id = window.location.hash.replace('#!', '');
+                $(id).tab('show');
+            }
+        })
+    });
+
+    $(function () {
+        $('#reviewCount').on('click', function () {
+            window.location.hash = '#!#reviews';
+            $('#reviews').tab('show');
+        });
+    });
+</script>

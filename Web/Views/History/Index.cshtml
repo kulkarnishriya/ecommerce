@@ -1,0 +1,76 @@
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+@model IEnumerable<HistoryModel>
+@{
+    Layout = "_CommonLayout";
+}
+@{
+    ViewData["Title"] = "History";
+}
+
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+    @if (Model != null && Model.Count() > 0)
+    {
+        
+        <form asp-controller="History">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <td>Name</td>
+                        <td>Quantity</td>
+                        <td>Price</td>
+                        <td>Date</td>
+                        <td>Action</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cartItem in Model)
+                    {
+                        <tr>
+                            <td style="width: 15%">
+                                <div class="text-sm-center">
+                                    @if (cartItem.ProductImage != null)
+                                    {
+                                        <img src="@cartItem.ProductImage" class="cart-item-image" alt="@cartItem.Name" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/images/system/no-image.png" class="cart-item-image" alt="@cartItem.Name" />
+                                    }
+                                </div>
+                            </td>
+                            <td style="width: 40%">
+                                @cartItem.Name
+                            </td>
+                            <td style="width: 17%">
+                               @cartItem.Quantity
+                            </td>
+                            <td style="width: 18%;">
+                                <div class="">Rs.@cartItem.Price.ToString("C2")</div>
+                            </td>
+                            <td style="width: 10%">
+                                @cartItem.DateofPurchase
+                            </td>
+                            <td style="width: 10%">
+                                @cartItem.Action
+                            </td>
+                        </tr>
+                    }
+                    
+                </tbody>
+            </table>
+        </form>
+    }
+    else
+    {
+        <h5>No History found.</h5>
+    }
+            <table>
+                    <tr>
+                        <td colspan="5">
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Back</a>
+                        </td>
+                    </tr>
+                    </table>
+</div>

@@ -1,0 +1,90 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_eShoppingAPI_name": {
+            "defaultValue": "eShoppingAPI",
+            "type": "String"
+        },
+        "serverfarms_ASP_ECommerceWebsite_971a_externalid": {
+            "defaultValue": "/subscriptions/ab8dd4cd-3cc0-49df-a73c-8fb67f9fb8c8/resourceGroups/ECommerceWebsite/providers/Microsoft.Web/serverfarms/ASP-ECommerceWebsite-971a",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('sites_eShoppingAPI_name')]",
+            "location": "East US",
+            "kind": "app",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "eshoppingapi.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "eshoppingapi.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[parameters('serverfarms_ASP_ECommerceWebsite_971a_externalid')]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "siteConfig": {},
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "hostNamesDisabled": false,
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": false,
+                "redundancyMode": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('sites_eShoppingAPI_name'), '/453882076e5540dfa649346c9e6fb1c6')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eShoppingAPI_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "VS Code",
+                "deployer": "Push-Deployer",
+                "message": "Created via a push deployment",
+                "start_time": "2020-05-14T12:14:49.5662829Z",
+                "end_time": "2020-05-14T12:14:54.6844391Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('sites_eShoppingAPI_name'), '/da1ca907f2b249dd97acc8435bb19e9a')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_eShoppingAPI_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "VS Code",
+                "deployer": "Push-Deployer",
+                "message": "Created via a push deployment",
+                "start_time": "2020-05-15T08:39:32.8163896Z",
+                "end_time": "2020-05-15T08:39:38.8632709Z",
+                "active": true
+            }
+        }
+    ]
+}

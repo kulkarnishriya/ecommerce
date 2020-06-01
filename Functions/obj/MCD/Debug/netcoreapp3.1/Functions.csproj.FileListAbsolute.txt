@@ -1,0 +1,13 @@
+F:\ECommercePOC\Functions\bin\MCD\Debug\netcoreapp3.1\Functions.exe
+F:\ECommercePOC\Functions\bin\MCD\Debug\netcoreapp3.1\Functions.deps.json
+F:\ECommercePOC\Functions\bin\MCD\Debug\netcoreapp3.1\Functions.runtimeconfig.json
+F:\ECommercePOC\Functions\bin\MCD\Debug\netcoreapp3.1\Functions.runtimeconfig.dev.json
+F:\ECommercePOC\Functions\bin\MCD\Debug\netcoreapp3.1\Functions.dll
+F:\ECommercePOC\Functions\bin\MCD\Debug\netcoreapp3.1\Functions.pdb
+F:\ECommercePOC\Functions\obj\MCD\Debug\netcoreapp3.1\Functions.csprojAssemblyReference.cache
+F:\ECommercePOC\Functions\obj\MCD\Debug\netcoreapp3.1\Functions.csproj.CoreCompileInputs.cache
+F:\ECommercePOC\Functions\obj\MCD\Debug\netcoreapp3.1\Functions.AssemblyInfoInputs.cache
+F:\ECommercePOC\Functions\obj\MCD\Debug\netcoreapp3.1\Functions.AssemblyInfo.cs
+F:\ECommercePOC\Functions\obj\MCD\Debug\netcoreapp3.1\Functions.dll
+F:\ECommercePOC\Functions\obj\MCD\Debug\netcoreapp3.1\Functions.pdb
+F:\ECommercePOC\Functions\obj\MCD\Debug\netcoreapp3.1\Functions.genruntimeconfig.cache

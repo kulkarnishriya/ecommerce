@@ -1,0 +1,187 @@
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+@model ProductModel
+@{
+    Layout = "_CommonLayout";
+}
+@{
+    ViewData["Title"] = "Upload product for Sell";
+}
+
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+    <form asp-controller="Home" asp-action="ProductAdd" method="post" class="form-horizontal" enctype="multipart/form-data">
+        <hr />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group row">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Price" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+        </div>
+         <div class="form-group row">
+            <label asp-for="Description" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+        @* @section actionHeader {
+        <div class="input-group">
+        <input type="file" id="fileInput" name="imageFile" class="input-file" accept="image/*" multiple="multiple" />
+        <label for="ProductImage" id="upload" class="btn btn-primary input-stack-margin"><i class="fa fa-upload"></i>&nbsp; Upload</label>
+        <button type="button" id="delete" class="btn btn-danger input-stack-margin"><i class="fa fa-trash-o"></i>&nbsp; Delete (selected)</button> }*@
+       
+
+        <div class="form-group row">
+            <label asp-for="Category" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Category" class="form-control" />
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Manufacturers" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Manufacturers" class="form-control" />
+                <span asp-validation-for="Manufacturers" class="text-danger"></span>
+            </div>
+        </div>
+         <div class="form-group row">
+            <label asp-for="ProductImage"  class="col-md-2 control-label">Image</label>
+             <div class=" col-md-5">
+            <input type="file" id="image" name="image" class="input-file" asp-for="Image" accept="image/*">
+            <div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-offset-2 col-md-10" style="padding-top:10px;">
+                <button type="submit" class="btn btn-secondary" asp-controller="Home" asp-action="CreateProduct">Add</button>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Back</a>
+            </div>
+        </div>
+    </form>
+            
+    @section Scripts {
+        @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    }
+</div>
+<script>
+    // template for image object
+    function createNewImageElement(item) {
+        // view template
+        var template = `
+            <div class ="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                <div class ="thumbnail">
+                    <input type="checkbox" name="deleteCheckBox" value="imgId" />
+                    <button type="button" id="btnCopyToClipboard" class ="pull-right btn-xs">Copy image link</button>
+                    <img src="imgSrcHolder" id="imgSrcId" class ="thumbnail-img imageSource" alt="imgAlt" title="imgTitle">
+                    <div class ="caption">
+                        <h3 class ="thumbnail-title" title="labelImageTitle">labelImageFileName</h3>
+                    </div>
+                </div>
+            </div>
+        `
+        // replace placeholder value of the template
+        var newInput = template.replace('imgSrcHolder', item.fileName);
+        newInput = newInput.replace('hiddenValue', item.id);
+        newInput = newInput.replace('imgAlt', item.fileName);
+        newInput = newInput.replace('imgTitle', item.fileName);
+        newInput = newInput.replace('labelImageTitle', item.fileName);
+        newInput = newInput.replace('labelImageFileName', item.fileName);
+        newInput = newInput.replace('imgId', item.id);
+        newInput = newInput.replace('imgSrcId', 'img-' + item.id);
+
+        // append new element to wrapper
+        $('#imgWrapper').append(newInput);
+    }
+
+    // upload
+    $(document).on('click', '#upload', function (event) {
+        if (window.FormData !== undefined) {
+            var fileUpload = $('#fileInput').get(0);
+            var files = fileUpload.files;
+            var form = ('#imageUploadForm');
+            var fileData = new FormData(form[0]);
+            var ValidImageTypes = ["image/gif", "image/jpeg", "image/png"];
+
+            // build the FormData
+            for (var i = 0; i < files.length; i++) {
+                if ($.inArray(files[i].type, ValidImageTypes) < 0) {
+                    continue;
+                }
+
+                fileData.append(files[i].name, files[i]);
+            }
+
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+            fileData.append('__RequestVerificationToken', token);
+
+            // clear the input field
+            $('#fileInput').val("");
+        }
+        else {
+            console.log('FormData is not supported.');
+        }
+    });
+
+    // delete
+    $(document).on('click', '#delete', function () {
+        var imageIds = [];
+        var form = ('#imageDeleteForm');
+        var checkboxArray = document.getElementsByName('deleteCheckBox');
+
+        // check if checkbox is checked
+        for (var i = 0; i < checkboxArray.length; i++) {
+            if (checkboxArray[i].checked) {
+                imageIds.push(checkboxArray[i].value);
+            }
+        }
+
+        var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+    });
+
+    // toggle icheck when div is clicked
+    $(document).on('click', '.thumbnail', function () {
+        if (event.target.nodeName !== "BUTTON") {
+            var parent = $(this);
+            parent.first().iCheck('toggle');
+        }
+    });
+
+    // initialize ICheck
+    function initializeICheck() {
+        // iCheck
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        });
+    };
+
+    // copy to clipboard
+    $(document).on('click', '#btnCopyToClipboard', function () {
+        var imgId = $(this).siblings('img').attr('id');
+        var imgSrc = document.getElementById(imgId).src;
+        copyToClipboard(imgSrc);
+    });
+
+    function copyToClipboard(value) {
+        var template = `<input type="text" id="copyToClipboard" value="valueToReplace" />`;
+        var tmpElem = template.replace('valueToReplace', value);
+        $('body').append(tmpElem);
+        document.getElementById("copyToClipboard").focus();
+        document.getElementById("copyToClipboard").select();
+        document.execCommand('copy');
+        document.getElementById("copyToClipboard").remove();
+    };
+</script>

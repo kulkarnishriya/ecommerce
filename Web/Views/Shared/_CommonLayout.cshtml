@@ -1,0 +1,117 @@
+@using System.Security.Claims
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Shopping</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+        @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+        <script src="~/js/site.js" asp-append-version="true"></script>
+
+</head>
+<body>
+    
+    <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <a asp-area="" asp-controller="Home" asp-action="AllProducts" class= "btn btn-secondary"> View all items</a>
+        <a asp-area="" asp-controller="History" asp-action="Index" class= "btn btn-secondary"> History</a>
+        @* @if (User.IsInRole("Application administrator"))
+        { *@
+            <a asp-area="" asp-controller="Admin" asp-action="Index" class= "btn btn-secondary">Admin- Menu</a>
+        @* } *@
+        <a asp-area="" asp-controller="Home" asp-action="ProductAdd" class= "btn btn-secondary"> Sell Product</a>
+        <a asp-area="" asp-controller="Cart" asp-action="Index" class= "btn btn-secondary"> View my Cart</a>
+        
+        <partial name="_LoginPartial" />
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <form asp-area="" asp-controller="Home" asp-action="ProductSearch" method="get" class="form-inline">
+                        <input class="form-control mr-sm-2 my-1" name="name" placeholder="Search">
+                        <button class="btn btn-outline-success my-1" type="submit">Search</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <h1 style="background-color: aliceblue; vertical-align: middle;">Welcome to my shopping Website!!</h1>
+     <div class="container-fluid">
+        @RenderBody()
+    </div>
+     <section class="content-header clearfix">
+                <div class="pull-left">
+                    @await RenderSectionAsync("actionHeader", required: false)
+                </div>
+    </section>
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="open-admin" id="open-admin">
+            <span class="fa fa-navicon">&nbsp;Admin</span>
+        </div>
+
+        <div class="admin-menu-body" id="admin-menu-body">
+            <div class="close-admin">
+                <span class="fa fa-close" id="close-admin"></span>
+            </div>
+            <div>
+                <ul>
+                    <li>
+                        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin dashboard</a>
+                    </li>
+                    @if (ViewData["ProductId"] != null)
+                    {
+                        <li>
+                            <a asp-area="Admin" asp-controller="Product" asp-action="Edit" asp-route-id="@ViewData["ProductId"]">Edit product</a>
+                        </li>
+                    }
+                    <li>
+                        <a asp-area="Admin" asp-controller="Product" asp-action="List">Product Catalog</a>
+                    </li>
+                    <li>
+                        <a asp-area="Admin" asp-controller="Order" asp-action="List">Order List</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    }
+    
+    <br />
+     <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020 - ECommerce website
+        </div>
+    </footer>
+</body>
+</html>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+<script>
+    $(function () {
+        if (JSON.parse(sessionStorage.getItem("isAdminMenuOpen")) === true) {
+            document.getElementById("admin-menu-body").style.transition = "0s";
+            document.getElementById("admin-menu-body").style.right = "0px";
+        }
+    });
+
+    $(function () {
+        $('#open-admin').on('click', function () {
+            document.getElementById("admin-menu-body").style.right = "0px";
+            sessionStorage.setItem("isAdminMenuOpen", JSON.stringify(true));
+        });
+
+        $('#close-admin').on('click', function () {
+            document.getElementById("admin-menu-body").style.transition = "0.5s";
+            document.getElementById("admin-menu-body").style.right = "-200px";
+            sessionStorage.setItem("isAdminMenuOpen", JSON.stringify(false));
+        });
+    });
+</script>

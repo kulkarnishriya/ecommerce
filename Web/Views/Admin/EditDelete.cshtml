@@ -1,0 +1,73 @@
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+@model ProductModel
+@{
+    ViewData["Title"] = "Edit/Delete a product.";
+}
+
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+    <form asp-controller="Home" asp-action="ProductAdd" method="post" class="form-horizontal" enctype="multipart/form-data">
+        <hr />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group row">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Price" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+        </div>
+         <div class="form-group row">
+            <label asp-for="Description" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+        @* @section actionHeader {
+        <div class="input-group">
+        <input type="file" id="fileInput" name="imageFile" class="input-file" accept="image/*" multiple="multiple" />
+        <label for="ProductImage" id="upload" class="btn btn-primary input-stack-margin"><i class="fa fa-upload"></i>&nbsp; Upload</label>
+        <button type="button" id="delete" class="btn btn-danger input-stack-margin"><i class="fa fa-trash-o"></i>&nbsp; Delete (selected)</button> }*@
+       
+
+        <div class="form-group row">
+            <label asp-for="Category" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Category" class="form-control" />
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Manufacturers" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Manufacturers" class="form-control" />
+                <span asp-validation-for="Manufacturers" class="text-danger"></span>
+            </div>
+        </div>
+         
+        <div class="form-group row">
+            <div class="col-md-offset-2 col-md-10" style="padding-top:10px;">
+                <button type="submit" class="btn btn-secondary" asp-controller="Admin" asp-action="Edit">Edit</button>
+                <button type="submit" class="btn btn-secondary" asp-controller="Admin" asp-action="Delete" asp-route-id= "@Model.Id">Delete</button>
+                <a asp-controller="Admin" asp-action="Index" class="btn btn-primary">Back</a>
+            </div>
+        </div>
+    </form>
+            
+    @section Scripts {
+        @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    }
+</div>
+<script>
+  
+</script>
